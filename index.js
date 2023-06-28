@@ -1,20 +1,20 @@
 const contacts = require("./contacts");
 
-// const argv = require("yargs").argv;
+const argv = require("yargs").argv;
 
-const { program } = require("commander");
-program
-  .option("-a, --action <type>", "choose action")
-  .option("-i, --id <type>", "user id")
-  .option("-n, --name <type>", "user name")
-  .option("-e, --email <type>", "user email")
-  .option("-p, --phone <type>", "user phone");
+// const { program } = require("commander");
+// program
+//   .option("-a, --action <type>", "choose action")
+//   .option("-i, --contactId <type>", "user id")
+//   .option("-n, --name <type>", "user name")
+//   .option("-e, --email <type>", "user email")
+//   .option("-p, --phone <type>", "user phone");
 
-program.parse(process.argv);
+// program.parse(process.argv);
 
-const argv = program.opts();
+// const argv = program.opts();
 
-async function invokeAction({ action, id, name, email, phone }) {
+async function invokeAction({ action, contactId, name, email, phone }) {
   switch (action) {
     case "list":
       const allContacts = await contacts.listContacts();
@@ -22,7 +22,7 @@ async function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "get":
-      const oneContact = await contacts.getContactById(id);
+      const oneContact = await contacts.getContactById(contactId);
       console.log(oneContact);
       break;
 
@@ -32,9 +32,18 @@ async function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "remove":
-      const removeContact = await contacts.removeContact(id);
+      const removeContact = await contacts.removeContact(contactId);
       console.log(removeContact);
       break;
+
+    case "update":
+      const updatedContact = await contacts.updateContact(
+        contactId,
+        name,
+        email,
+        phone
+      );
+      console.log(updatedContact);
 
     default:
       console.warn("\x1B[31m Unknown action type!");
